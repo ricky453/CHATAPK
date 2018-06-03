@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">My Chat App</string>
+    <string name="app_name">IPAM Chat</string>
+    <string name="abrir">Abrir</string>
+    <string name="cerrar">Cerrar</string>
 </resources>
