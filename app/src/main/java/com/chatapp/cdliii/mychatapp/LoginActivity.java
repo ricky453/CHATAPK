@@ -8,15 +8,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.chatapp.cdliii.mychatapp.Mensajes.MsgActivity;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.HashMap;
+
+public class LoginActivity extends AppCompatActivity {
 
     private EditText txtUsuario;
     private EditText txtPassword;
@@ -26,7 +31,11 @@ public class MainActivity extends AppCompatActivity {
     private VolleyRP volley;
     private RequestQueue mRequest;
 
-    private static String IP = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Login_GETID.php?id=";
+    private static final String IP = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Login_GETID.php?id=";
+    private static final String IP_TOKEN = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Token_INSERTandUPDATE.php";
+
+    private String USER = "";
+    private String PASSWORD = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void VerificarLogin(String username, String password){
+        USER = username;
+        PASSWORD = password;
         SolicitudJSON(IP+username);
     }
 
@@ -66,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Ocurrió un error al conectarse con el administrador", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Ocurrió un error al conectarse con el administrador", Toast.LENGTH_SHORT).show();
             }
         });
         VolleyRP.addToQueue(solicitud, mRequest, this, volley);
@@ -78,12 +89,13 @@ public class MainActivity extends AppCompatActivity {
             String estado = datos.getString("resultado");
             if(estado.equals("CC")){
                 JSONObject jsonDatos = new JSONObject(datos.getString("datos"));
-
+                String usuario = jsonDatos.getString("idUsuario");
                 String pass = jsonDatos.getString("Password");
-                if(pass.equals(txtPassword.getText().toString())){
-                    Toast.makeText(this, "Contra correcta", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(this, HomeActivity.class);
-                    startActivity(intent);
+                if(usuario.equals(USER) && pass.equals(PASSWORD)){
+                    String token = FirebaseInstanceId.getInstance().getToken();
+                    if(token!=null) subirToken(token);
+                    else Toast.makeText(this, "El token es nulo", Toast.LENGTH_SHORT).show();
+
                 }else{
                     Toast.makeText(this, "Contra incorrecta", Toast.LENGTH_SHORT).show();
 
@@ -95,5 +107,29 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (JSONException e) {
         }
+    }
+
+    private void subirToken(String token){
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("id", USER);
+        hashMap.put("token", token);
+        JsonObjectRequest solicitud = new JsonObjectRequest(Request.Method.POST, IP_TOKEN, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Toast.makeText(LoginActivity.this, response.getString("resultado"), Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {}
+                Intent intent = new Intent(LoginActivity.this, MsgActivity.class);
+                intent.putExtra("key_emisor", USER);
+                startActivity(intent);
+            }
+        }, new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(LoginActivity.this, "El token no pudo ser subido a la base de datos.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        VolleyRP.addToQueue(solicitud, mRequest, this, volley);
     }
 }
