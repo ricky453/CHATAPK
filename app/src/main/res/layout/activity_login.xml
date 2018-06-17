@@ -29,7 +29,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/logo"
-        android:id="@+id/scrollLogin">
+        android:id="@+id/scrollLogin"
+        android:scrollbars="none">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -94,60 +96,63 @@
                 android:paddingLeft="10dp"
                 android:inputType="textPassword"
                 android:id="@+id/password"
-                android:layout_marginBottom="10dp"/>
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tabPantalla"
-                android:stretchColumns="*"
-                android:shrinkColumns="*"
-                android:layout_alignParentBottom="true">
-
-                <TableRow>
-                    <Button
-                        android:id="@+id/btnRegistrarse"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:background="@drawable/boton_registrar"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:text="Registrarse"
-                        android:textColor="#30ddb2"
-                        android:textStyle="normal" />
-
-                    <Button
-                        android:id="@+id/btnIniciar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="20dp"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/boton_iniciar"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:text="Iniciar sesión"
-                        android:textColor="@color/white"
-                        android:textStyle="normal" />
-
-                </TableRow>
-            </TableLayout>
+                android:layout_marginBottom="20dp"/>
 
         </LinearLayout>
+
     </ScrollView>
-    
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:id="@+id/tabPantalla"
+        android:stretchColumns="*"
+        android:shrinkColumns="*"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/scrollLogin">
+
+        <TableRow>
+            <Button
+                android:id="@+id/btnRegistrarse"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/boton_registrar"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:text="Registrarse"
+                android:textColor="#14b48c"
+                android:textStyle="normal" />
+
+            <Button
+                android:id="@+id/btnIniciar"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/boton_iniciar"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:text="Iniciar sesión"
+                android:textColor="@color/white"
+                android:textStyle="normal" />
+
+        </TableRow>
+    </TableLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="IPAM - 2018"
         android:textColor="@color/white"
-        android:layout_below="@id/scrollLogin"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:gravity="right"/>
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="right"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

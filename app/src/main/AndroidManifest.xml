@@ -21,6 +21,16 @@
 
             </intent-filter>
         </activity>
+        <activity android:name=".Usuarios.RegistroActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT"
+                    android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
+            </intent-filter>
+        </activity>
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

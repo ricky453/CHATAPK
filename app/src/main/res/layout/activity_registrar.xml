@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/logor"
+        android:src="@drawable/ic_ipam"
+        android:scaleType="fitCenter"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollRegister"
+        android:layout_below="@id/logor">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rectan_trans_blanco"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Registro"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="10dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¡Rellena todos los campos!"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:layout_marginBottom="20dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"/>
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="Username"
+                android:textColorHint="#6d6d6d"
+                android:background="@drawable/borde_blanco"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:textSize="14sp"
+                android:textColor="#6d6d6d"
+                android:drawablePadding="5dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:id="@+id/usuarioRegistro"
+                android:layout_marginBottom="10dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tabPantalla"
+                android:stretchColumns="*"
+                android:shrinkColumns="*"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_alignParentBottom="true">
+
+            <TableRow>
+            <AutoCompleteTextView
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:hint="Nombre"
+                android:textColorHint="#6d6d6d"
+                android:background="@drawable/borde_blanco"
+                android:textSize="14sp"
+                android:textColor="#6d6d6d"
+                android:drawablePadding="5dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:id="@+id/nombreRegistro"
+                android:layout_marginBottom="10dp" />
+
+            <AutoCompleteTextView
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:hint="Apellido"
+                android:textColorHint="#6d6d6d"
+                android:background="@drawable/borde_blanco"
+                android:textSize="14sp"
+                android:textColor="#6d6d6d"
+                android:drawablePadding="5dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:id="@+id/apellidoRegistro"
+                android:layout_marginLeft="2dp"
+                android:layout_marginBottom="10dp" />
+            </TableRow>
+            </TableLayout>
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="Correo"
+                android:textColorHint="#6d6d6d"
+                android:background="@drawable/borde_blanco"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:textSize="14sp"
+                android:textColor="#6d6d6d"
+                android:drawablePadding="5dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:id="@+id/correoRegistro"
+                android:layout_marginBottom="10dp" />
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="Telefono"
+                android:textColorHint="#6d6d6d"
+                android:background="@drawable/borde_blanco"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:textSize="14sp"
+                android:textColor="#6d6d6d"
+                android:drawablePadding="5dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:id="@+id/telefonoRegistro"
+                android:layout_marginBottom="10dp"
+                android:inputType="number"/>
+
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="Contraseña"
+                android:textColorHint="#6d6d6d"
+                android:background="@drawable/borde_blanco"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:textSize="14sp"
+                android:textColor="#6d6d6d"
+                android:drawablePadding="5dp"
+                android:paddingStart="10dp"
+                android:paddingLeft="10dp"
+                android:inputType="textPassword"
+                android:id="@+id/contrasenaRegistro"
+                android:layout_marginBottom="20dp" />
+        </LinearLayout>
+    </ScrollView>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tabRegitro"
+        android:stretchColumns="*"
+        android:shrinkColumns="*"
+        android:layout_below="@id/scrollRegister"
+        android:layout_alignParentBottom="true">
+
+        <TableRow>
+            <Button
+                android:id="@+id/btnAtrasRegistro"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/boton_registrar"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="Tengo cuenta"
+                android:textColor="#14b48c"
+                android:textStyle="normal"/>
+
+            <Button
+                android:id="@+id/btnRegistrarRegistro"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/boton_iniciar"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="Registrarme"
+                android:textColor="@color/white"
+                android:textStyle="normal" />
+
+        </TableRow>
+    </TableLayout>
+</RelativeLayout>

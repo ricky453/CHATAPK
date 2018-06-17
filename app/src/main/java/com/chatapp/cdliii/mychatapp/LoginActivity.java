@@ -1,6 +1,8 @@
 package com.chatapp.cdliii.mychatapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.chatapp.cdliii.mychatapp.Mensajes.MsgActivity;
+import com.chatapp.cdliii.mychatapp.Usuarios.RegistroActivity;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
@@ -37,11 +40,21 @@ public class LoginActivity extends AppCompatActivity {
     private String USER = "";
     private String PASSWORD = "";
 
+    private boolean entrar = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         getWindow().setBackgroundDrawableResource(R.drawable.background);
+
+        if(Preferences.obtenerBoolean(LoginActivity.this, Preferences.PREFERENCE_ESTADO)==true){
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
 
         volley = VolleyRP.getInstance(this);
         mRequest = volley.getRequestQueue();
@@ -55,14 +68,21 @@ public class LoginActivity extends AppCompatActivity {
         btnIngresar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 VerificarLogin(txtUsuario.getText().toString(), txtPassword.getText().toString());
+                VerificarLogin(txtUsuario.getText().toString(), txtPassword.getText().toString());
+            }
+        });
+        btnRegistrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this, RegistroActivity.class);
+                startActivity(i);
             }
         });
 
     }
 
     public void VerificarLogin(String username, String password){
-        USER = username;
+        USER = username.toUpperCase().trim();
         PASSWORD = password;
         SolicitudJSON(IP+username);
     }
@@ -116,12 +136,15 @@ public class LoginActivity extends AppCompatActivity {
         JsonObjectRequest solicitud = new JsonObjectRequest(Request.Method.POST, IP_TOKEN, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                entrar = true;
+                Preferences.savePreferenceString(LoginActivity.this, USER, Preferences.PREFERENCE_USUARIO_LOGIN);
+                Preferences.savePreferenceBoolean(LoginActivity.this, entrar, Preferences.PREFERENCE_ESTADO);
                 try {
                     Toast.makeText(LoginActivity.this, response.getString("resultado"), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {}
                 Intent intent = new Intent(LoginActivity.this, MsgActivity.class);
-                intent.putExtra("key_emisor", USER);
                 startActivity(intent);
+                finish();
             }
         }, new Response.ErrorListener(){
 
@@ -132,4 +155,5 @@ public class LoginActivity extends AppCompatActivity {
         });
         VolleyRP.addToQueue(solicitud, mRequest, this, volley);
     }
+
 }

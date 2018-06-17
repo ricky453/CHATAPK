@@ -21,6 +21,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
 import com.chatapp.cdliii.mychatapp.VolleyRP;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -68,12 +69,7 @@ public class MsgActivity extends AppCompatActivity {
         volley = VolleyRP.getInstance(this);
         mRequest = volley.getRequestQueue();
 
-        Intent extras = getIntent();
-        Bundle bundle = extras.getExtras();
-        if(bundle!=null) {
-            EMISOR = bundle.getString("key_emisor");
-        }
-
+        EMISOR = Preferences.obtenerString(this, Preferences.PREFERENCE_USUARIO_LOGIN);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         btnEnviar = (Button) findViewById(R.id.btnEnviar);
@@ -92,7 +88,7 @@ public class MsgActivity extends AppCompatActivity {
         btnEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mensaje = etEscribirMensaje.getText().toString();
+                String mensaje = validarCadena(etEscribirMensaje.getText().toString());
                 RECEPTOR = etReceptor.getText().toString();
                 if(!mensaje.isEmpty() && !RECEPTOR.isEmpty()){
                     MENSAJE_ENVIAR = mensaje;
@@ -120,6 +116,15 @@ public class MsgActivity extends AppCompatActivity {
                     createMsg(mensaje, hora, 2);
                 }
             };
+    }
+
+    //No enviar mensajes en blanco
+    //Borrar mensajes en blanco al inicio
+    private String validarCadena(String cadena){
+        for(int i =0; i<cadena.length(); i++){
+            if(!(""+cadena.charAt(i)).equalsIgnoreCase(" ")) return cadena.substring(i, cadena.length());
+        }
+        return "";
     }
 
     private void sendMsg(){
