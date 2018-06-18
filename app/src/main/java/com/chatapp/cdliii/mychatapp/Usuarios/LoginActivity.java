@@ -1,8 +1,6 @@
-package com.chatapp.cdliii.mychatapp;
+package com.chatapp.cdliii.mychatapp.Usuarios;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,8 +13,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.chatapp.cdliii.mychatapp.Mensajes.MsgActivity;
-import com.chatapp.cdliii.mychatapp.Usuarios.RegistroActivity;
+import com.chatapp.cdliii.mychatapp.Amigos.HomeActivity;
+import com.chatapp.cdliii.mychatapp.Preferences;
+import com.chatapp.cdliii.mychatapp.R;
+import com.chatapp.cdliii.mychatapp.VolleyRP;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
@@ -50,9 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setBackgroundDrawableResource(R.drawable.background);
 
         if(Preferences.obtenerBoolean(LoginActivity.this, Preferences.PREFERENCE_ESTADO)==true){
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
+            iniciarHome();
         }
 
 
@@ -82,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void VerificarLogin(String username, String password){
-        USER = username.toUpperCase().trim();
+        USER = username.toLowerCase().trim();
         PASSWORD = password;
         SolicitudJSON(IP+username);
     }
@@ -97,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LoginActivity.this, "Ocurrió un error al conectarse con el administrador", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "¡Ocurrió un error!, por favor conéctese con el administrador.", Toast.LENGTH_SHORT).show();
             }
         });
         VolleyRP.addToQueue(solicitud, mRequest, this, volley);
@@ -114,10 +112,10 @@ public class LoginActivity extends AppCompatActivity {
                 if(usuario.equals(USER) && pass.equals(PASSWORD)){
                     String token = FirebaseInstanceId.getInstance().getToken();
                     if(token!=null) subirToken(token);
-                    else Toast.makeText(this, "El token es nulo", Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(this, "El token es nulo.", Toast.LENGTH_SHORT).show();
 
                 }else{
-                    Toast.makeText(this, "Contra incorrecta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "¡Contraseña incorrecta!", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -142,9 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     Toast.makeText(LoginActivity.this, response.getString("resultado"), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {}
-                Intent intent = new Intent(LoginActivity.this, MsgActivity.class);
-                startActivity(intent);
-                finish();
+                iniciarHome();
             }
         }, new Response.ErrorListener(){
 
@@ -154,6 +150,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         VolleyRP.addToQueue(solicitud, mRequest, this, volley);
+    }
+
+    public void iniciarHome(){
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

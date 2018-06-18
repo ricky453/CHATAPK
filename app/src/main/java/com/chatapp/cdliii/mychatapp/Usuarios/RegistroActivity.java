@@ -1,6 +1,5 @@
 package com.chatapp.cdliii.mychatapp.Usuarios;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +13,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.chatapp.cdliii.mychatapp.LoginActivity;
-import com.chatapp.cdliii.mychatapp.Mensajes.MsgActivity;
 import com.chatapp.cdliii.mychatapp.R;
 import com.chatapp.cdliii.mychatapp.VolleyRP;
 
@@ -64,7 +61,11 @@ public class RegistroActivity extends AppCompatActivity {
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!getStringET(user).isEmpty()||!getStringET(nombre).isEmpty()||!getStringET(apellido).isEmpty()||!getStringET(correo).isEmpty()||!getStringET(password).isEmpty()){
+                if(!getStringET(user).isEmpty()&&
+                        !getStringET(nombre).isEmpty()&&
+                        !getStringET(apellido).isEmpty()&&
+                        !getStringET(correo).isEmpty()&&
+                        !getStringET(password).isEmpty()){
                     registrarWebService(getStringET(user).trim(),
                     getStringET(password).trim(),
                             getStringET(nombre).trim(),
@@ -86,7 +87,7 @@ public class RegistroActivity extends AppCompatActivity {
 
     private void registrarWebService(String usuario, String contrasena, String nombre, String apellido, String correo, String telefono){
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("id", usuario.toUpperCase());
+        hashMap.put("id", usuario.toLowerCase());
         hashMap.put("password", contrasena);
         hashMap.put("nombres", nombre);
         hashMap.put("apellidos", apellido);
@@ -111,7 +112,7 @@ public class RegistroActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(RegistroActivity.this, "ERROR:No se pudo registrar.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegistroActivity.this, "ERROR: no se pudo registrar.", Toast.LENGTH_SHORT).show();
             }
         });
         VolleyRP.addToQueue(solicitud, mRequest, this, volley);

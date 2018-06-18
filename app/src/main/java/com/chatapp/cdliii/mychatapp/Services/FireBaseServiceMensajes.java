@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.app.NotificationCompat.Builder;
 import com.chatapp.cdliii.mychatapp.Mensajes.MsgActivity;
+import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -27,14 +29,20 @@ public class FireBaseServiceMensajes extends FirebaseMessagingService{
         String hora = remoteMessage.getData().get("hora");
         String cabecera = remoteMessage.getData().get("cabezera");
         String cuerpo = remoteMessage.getData().get("cuerpo");
-        mensaje(mensaje, hora);
-        showNotification(cabecera, cuerpo);
+        String receptor = remoteMessage.getData().get("receptor");
+        String emisorPHP = remoteMessage.getData().get("emisor");
+        String emisor = Preferences.obtenerString(this, Preferences.PREFERENCE_USUARIO_LOGIN);
+        if(emisor.equals(receptor)){
+            showNotification(cabecera, cuerpo);
+            mensaje(mensaje, hora, emisorPHP);
+        }
     }
 
-    private void mensaje(String mensaje, String hora ){
+    private void mensaje(String mensaje, String hora, String emisor){
         Intent i = new Intent(MsgActivity.MENSAJE);
         i.putExtra("key_mensaje", mensaje);
         i.putExtra("key_hora", hora);
+        i.putExtra("key_emisor_PHP", emisor);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(i);
     }
 

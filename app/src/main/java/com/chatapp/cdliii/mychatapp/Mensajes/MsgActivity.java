@@ -46,7 +46,6 @@ public class MsgActivity extends AppCompatActivity {
     private RecyclerView rv;
     private Button btnEnviar;
     private EditText etEscribirMensaje;
-    private EditText etReceptor;
     private List<TextMsg> mensajeTexto;
     private MsgAdapter adapter;
     private int TEXT_LINES=1;
@@ -70,11 +69,15 @@ public class MsgActivity extends AppCompatActivity {
         mRequest = volley.getRequestQueue();
 
         EMISOR = Preferences.obtenerString(this, Preferences.PREFERENCE_USUARIO_LOGIN);
+        Intent i = getIntent();
+        Bundle bundle = i.getExtras();
+        if(bundle!=null){
+            RECEPTOR = bundle.getString("key_receptor");
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         btnEnviar = (Button) findViewById(R.id.btnEnviar);
         etEscribirMensaje = (EditText) findViewById(R.id.txtNuevoMensaje);
-        etReceptor = (EditText) findViewById(R.id.receptor);
 
         rv = (RecyclerView) findViewById(R.id.recyclerView);
         LinearLayoutManager lm = new LinearLayoutManager(this);
@@ -88,8 +91,7 @@ public class MsgActivity extends AppCompatActivity {
         btnEnviar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mensaje = validarCadena(etEscribirMensaje.getText().toString());
-                RECEPTOR = etReceptor.getText().toString();
+                String mensaje = etEscribirMensaje.getText().toString().trim(); //Quita espacios del inicio y final
                 if(!mensaje.isEmpty() && !RECEPTOR.isEmpty()){
                     MENSAJE_ENVIAR = mensaje;
                     sendMsg();
@@ -113,19 +115,15 @@ public class MsgActivity extends AppCompatActivity {
                 public void onReceive(Context context, Intent intent) {
                     String mensaje = intent.getStringExtra("key_mensaje");
                     String hora = intent.getStringExtra("key_hora");
-                    createMsg(mensaje, hora, 2);
+                    String horaParametros[] = hora.split(",");
+                    String emisor = intent.getStringExtra("key_emisor_PHP");
+                    if(emisor.equals(RECEPTOR)){
+                        createMsg(mensaje, horaParametros[0], 2);
+                    }
                 }
             };
     }
 
-    //No enviar mensajes en blanco
-    //Borrar mensajes en blanco al inicio
-    private String validarCadena(String cadena){
-        for(int i =0; i<cadena.length(); i++){
-            if(!(""+cadena.charAt(i)).equalsIgnoreCase(" ")) return cadena.substring(i, cadena.length());
-        }
-        return "";
-    }
 
     private void sendMsg(){
         HashMap<String, String> hashMap = new HashMap<>();
@@ -149,7 +147,7 @@ public class MsgActivity extends AppCompatActivity {
         VolleyRP.addToQueue(solicitud, mRequest, this, volley);
     }
 
-    public void createMsg(String msg, String hora, int tipo  ){
+    public void createMsg(String msg, String hora, int tipo){
         TextMsg msjAuxiliar = new TextMsg();
         msjAuxiliar.setId("0");
         msjAuxiliar.setMsg(msg);

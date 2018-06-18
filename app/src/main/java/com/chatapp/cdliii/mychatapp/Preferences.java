@@ -3,8 +3,6 @@ package com.chatapp.cdliii.mychatapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.chatapp.cdliii.mychatapp.LoginActivity;
-
 /**
  * Created by ricky on 06-16-18.
  */
