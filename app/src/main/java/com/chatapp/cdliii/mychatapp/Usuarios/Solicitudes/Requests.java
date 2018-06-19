@@ -1,17 +1,18 @@
-package com.chatapp.cdliii.mychatapp.Amigos;
+package com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes;
+
+import android.widget.Button;
 
 /**
- * Created by ricky on 06-17-18.
+ * Created by ricky on 06-18-18.
  */
 
-public class FriendsAttributes {
+public class Requests {
+
     private int fotoPerfil;
     private String nombre;
-    private String ultimoMensaje;
     private String hora;
-    private String id;
 
-    public FriendsAttributes(){}
+    public Requests(){}
 
     public int getFotoPerfil() {
         return fotoPerfil;
@@ -29,27 +30,11 @@ public class FriendsAttributes {
         this.nombre = nombre;
     }
 
-    public String getUltimoMensaje() {
-        return ultimoMensaje;
-    }
-
-    public void setUltimoMensaje(String ultimoMensaje) {
-        this.ultimoMensaje = ultimoMensaje;
-    }
-
     public String getHora() {
         return hora;
     }
 
     public void setHora(String hora) {
         this.hora = hora;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }

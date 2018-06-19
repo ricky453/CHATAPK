@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.chatapp.cdliii.mychatapp.Usuarios.LoginActivity">
+    tools:context="com.chatapp.cdliii.mychatapp.Inicio.LoginActivity">
 
     
 <!--    <ImageView

@@ -1,4 +1,4 @@
-package com.chatapp.cdliii.mychatapp.Usuarios;
+package com.chatapp.cdliii.mychatapp.Inicio;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

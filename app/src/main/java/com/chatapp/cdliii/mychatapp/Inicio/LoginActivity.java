@@ -1,4 +1,4 @@
-package com.chatapp.cdliii.mychatapp.Usuarios;
+package com.chatapp.cdliii.mychatapp.Inicio;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +13,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.chatapp.cdliii.mychatapp.Amigos.HomeActivity;
 import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
+import com.chatapp.cdliii.mychatapp.Usuarios.UserActivity;
 import com.chatapp.cdliii.mychatapp.VolleyRP;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void iniciarHome(){
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        Intent intent = new Intent(LoginActivity.this, UserActivity.class);
         startActivity(intent);
         finish();
     }

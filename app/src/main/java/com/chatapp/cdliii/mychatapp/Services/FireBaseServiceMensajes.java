@@ -25,17 +25,27 @@ public class FireBaseServiceMensajes extends FirebaseMessagingService{
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        String mensaje = remoteMessage.getData().get("mensaje");
-        String hora = remoteMessage.getData().get("hora");
+        String type = remoteMessage.getData().get("type");
         String cabecera = remoteMessage.getData().get("cabezera");
         String cuerpo = remoteMessage.getData().get("cuerpo");
-        String receptor = remoteMessage.getData().get("receptor");
-        String emisorPHP = remoteMessage.getData().get("emisor");
-        String emisor = Preferences.obtenerString(this, Preferences.PREFERENCE_USUARIO_LOGIN);
-        if(emisor.equals(receptor)){
-            showNotification(cabecera, cuerpo);
-            mensaje(mensaje, hora, emisorPHP);
+        switch (type){
+            case "mensaje":
+                String mensaje = remoteMessage.getData().get("mensaje");
+                String hora = remoteMessage.getData().get("hora");
+                String receptor = remoteMessage.getData().get("receptor");
+                String emisorPHP = remoteMessage.getData().get("emisor");
+                String emisor = Preferences.obtenerString(this, Preferences.PREFERENCE_USUARIO_LOGIN);
+                if(emisor.equals(receptor)){
+                    showNotification(cabecera, cuerpo);
+                    mensaje(mensaje, hora, emisorPHP);
+                }
+                break;
+            case "solicitud":
+                String usuario_envio_solicitud = remoteMessage.getData().get("user_envio_solicitud");
+                showNotification(cabecera, cuerpo);
+                break;
         }
+
     }
 
     private void mensaje(String mensaje, String hora, String emisor){
