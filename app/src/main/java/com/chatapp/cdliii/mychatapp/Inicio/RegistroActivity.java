@@ -13,8 +13,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.chatapp.cdliii.mychatapp.Internet.SolicitudesJSON;
+import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
 import com.chatapp.cdliii.mychatapp.VolleyRP;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,7 +88,7 @@ public class RegistroActivity extends AppCompatActivity {
         return e.getText().toString();
     }
 
-    private void registrarWebService(String usuario, String contrasena, String nombre, String apellido, String correo, String telefono){
+    private void registrarWebService(final String usuario, String contrasena, String nombre, String apellido, String correo, String telefono){
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("id", usuario.toLowerCase());
         hashMap.put("password", contrasena);
@@ -98,9 +101,10 @@ public class RegistroActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     String estado = response.getString("resultado");
-                    if(estado.equalsIgnoreCase("Registrado exitosamente.")){
-                        Toast.makeText(RegistroActivity.this, estado, Toast.LENGTH_SHORT).show();
-                        finish();
+                    if(estado.equalsIgnoreCase("Se ha registrado correctamente.")){
+                        String token = FirebaseInstanceId.getInstance().getToken();
+                        if(token!=null) subirToken(usuario, token);
+                        else Toast.makeText(RegistroActivity.this, "El token es nulo.", Toast.LENGTH_SHORT).show();
                     }else {
                         Toast.makeText(RegistroActivity.this, estado, Toast.LENGTH_SHORT).show();
                         user.selectAll();
@@ -116,5 +120,26 @@ public class RegistroActivity extends AppCompatActivity {
             }
         });
         VolleyRP.addToQueue(solicitud, mRequest, this, volley);
+    }
+
+    private void subirToken(String id, String token) {
+        SolicitudesJSON json = new SolicitudesJSON() {
+            @Override
+            public void solicitudCompletada(JSONObject object) {
+                Toast.makeText(RegistroActivity.this, "Se registró correctamente.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void solicitudErronea() {
+                Toast.makeText(RegistroActivity.this, "No se pudo subir el token.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        };
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("id", id);
+        hashMap.put("token", token);
+        json.POST(this, SolicitudesJSON.IP_TOKEN_UPLOAD, hashMap);
+
     }
 }

@@ -10,21 +10,18 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.chatapp.cdliii.mychatapp.Internet.SolicitudesJSON;
 import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
-import com.chatapp.cdliii.mychatapp.VolleyRP;
+import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.DeleteRequestFromSearcher;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -52,7 +49,7 @@ public class RequestsFriendsFragment extends Fragment {
         linearLayout = (LinearLayout) view.findViewById(R.id.layoutVacioSolicitud);
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(lm);
-        adapter = new RequestsAdapter(requestsList, getContext());
+        adapter = new RequestsAdapter(requestsList, getContext(), this);
         rv.setAdapter(adapter);
 
         //for(int i=0; i<10; i++){
@@ -82,12 +79,12 @@ public class RequestsFriendsFragment extends Fragment {
         solicitudes.setHora(hora);
         solicitudes.setId(id);
         solicitudes.setEstado(estado);
-        requestsList.add(solicitudes);
+        requestsList.add(0, solicitudes);
         actualizarTarjetas();
     }
 
     public void agregarTarjetasSolicitud(Requests requests){
-        requestsList.add(requests);
+        requestsList.add(0, requests);
         actualizarTarjetas();
     }
 
@@ -111,6 +108,51 @@ public class RequestsFriendsFragment extends Fragment {
     @Subscribe
     public void ejecutarLlamada(Requests requests){
         agregarTarjetasSolicitud(requests);
+    }
+
+    @Subscribe
+    public void cancelarSolicitud(DeleteRequestFromRequests d){
+        eliminarTarjeta(d.getId());
+    }
+
+    public void cancelarSolicitud(final String id){
+        String usuarioEmisor = Preferences.obtenerString(getContext(), Preferences.PREFERENCE_USUARIO_LOGIN);
+        final SolicitudesJSON json = new SolicitudesJSON() {
+            @Override
+            public void solicitudCompletada(JSONObject object) {
+                try {
+                    String respuesta = object.getString("respuesta");
+                    if(respuesta.equals("200")){
+                        //Se canceló correctamente
+                        eliminarTarjeta(id);
+                        bus.post(new DeleteRequestFromSearcher(id));
+                        Toast.makeText(getContext(), object.getString("resultado"), Toast.LENGTH_SHORT).show();
+                    }else if (respuesta.equals("-1")){
+                        Toast.makeText(getContext(), "No se pudo cancelar la solicitud.", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getContext(), "No se pudo cancelar la solicitud.", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void solicitudErronea() {
+
+            }
+        };
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("emisor", usuarioEmisor);
+        hashMap.put("receptor", id);
+        json.POST(getContext(), SolicitudesJSON.URL_DELETE_A_REQUEST, hashMap);
+    }
+
+
+    public void eliminarTarjeta(String id){
+        for(int i=0; i<requestsList.size(); i++){
+            if(requestsList.get(i).getId().equals(id)){
+                requestsList.remove(i);
+                actualizarTarjetas();
+            }
+        }
     }
 
     public void SolicitudJSON(String URL){

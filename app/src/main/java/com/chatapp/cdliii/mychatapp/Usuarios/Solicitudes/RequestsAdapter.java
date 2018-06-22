@@ -22,10 +22,12 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
 
     private Context context;
     private List<Requests> requestsList;
+    private RequestsFriendsFragment requestsFriendsFragment;
 
-    public RequestsAdapter(List<Requests> listSolicitudes, Context context){
+    public RequestsAdapter(List<Requests> listSolicitudes, Context context, RequestsFriendsFragment requestsFriendsFragment){
         this.context = context;
         this.requestsList = listSolicitudes;
+        this.requestsFriendsFragment = requestsFriendsFragment;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
     }
 
     @Override
-    public void onBindViewHolder(RequestsHolder holder, int position) {
+    public void onBindViewHolder(RequestsHolder holder, final int position) {
         holder.fotoPerfil.setImageResource(requestsList.get(position).getFotoPerfil());
         holder.nombre.setText(requestsList.get(position).getNombre());
         holder.hora.setText(requestsList.get(position).getHora());
@@ -45,6 +47,12 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
             case 2:
                 holder.declinar.setHint("Cancelar solicitud");
                 holder.aceptar.setVisibility(View.GONE);
+                holder.declinar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        requestsFriendsFragment.cancelarSolicitud(requestsList.get(position).getId());
+                    }
+                });
                 break;
             case 3:
                 holder.declinar.setHint("Declinar");

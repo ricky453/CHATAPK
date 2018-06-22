@@ -13,6 +13,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.chatapp.cdliii.mychatapp.Internet.SolicitudesJSON;
 import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
 import com.chatapp.cdliii.mychatapp.Usuarios.UserActivity;
@@ -35,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     private RequestQueue mRequest;
 
     private static final String IP = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Login_GETID.php?id=";
-    private static final String IP_TOKEN = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Token_INSERTandUPDATE.php";
 
     private String USER = "";
     private String PASSWORD = "";
@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("id", USER);
         hashMap.put("token", token);
-        JsonObjectRequest solicitud = new JsonObjectRequest(Request.Method.POST, IP_TOKEN, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
+        JsonObjectRequest solicitud = new JsonObjectRequest(Request.Method.POST, SolicitudesJSON.IP_TOKEN_UPLOAD, new JSONObject(hashMap), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 entrar = true;
