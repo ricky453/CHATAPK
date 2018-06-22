@@ -7,4 +7,5 @@
     <color name="home_green">#30ddb2</color>
     <color name="home_green_dark">#14b48c</color>
     <color name="home_green_dark2">#148266</color>
+    <color name="colorBlack">#000000</color>
 </resources>

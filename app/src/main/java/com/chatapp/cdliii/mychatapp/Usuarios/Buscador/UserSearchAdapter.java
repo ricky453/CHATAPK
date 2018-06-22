@@ -48,7 +48,6 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
                 holder.getBotonAfirmar().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "Enviando solicitud...", Toast.LENGTH_LONG).show();
                         fragment.enviarSolicitud(attributesList.get(position).getId());
                     }
                 });
@@ -61,7 +60,6 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
                     @Override
                     public void onClick(View v) {
                         fragment.cancelarSolicitud(attributesList.get(position).getId());
-                        Toast.makeText(context, "Cancelando solicitud...", Toast.LENGTH_LONG).show();
                     }
                 });
                 break;
@@ -74,14 +72,12 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
                     @Override
                     public void onClick(View v) {
                         fragment.aceptarSolicitud(attributesList.get(position).getId());
-                        Toast.makeText(context, "Aceptando solicitud...", Toast.LENGTH_LONG).show();
                     }
                 });
                 holder.getBotonCancelar().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         fragment.cancelarSolicitud(attributesList.get(position).getId());
-                        Toast.makeText(context, "Declinando solicitud...", Toast.LENGTH_LONG).show();
                     }
                 });
                 break;
@@ -92,7 +88,6 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
                 holder.getBotonAfirmar().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "Viendo perfil...", Toast.LENGTH_LONG).show();
                     }
                 });
                 holder.getCardView().setOnLongClickListener(new View.OnLongClickListener() {
@@ -104,7 +99,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         fragment.eliminarAmigo(attributesList.get(position).getId());
-                                        Toast.makeText(context, "Se eliminó el amigo.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(context, "Se eliminó de tu lista de amigos.", Toast.LENGTH_LONG).show();
                                     }
                                 }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                             @Override
@@ -117,8 +112,17 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
                 });
                 break;
         }
+        if(attributesList.get(position).getEstado()==1){
+            holder.getEstadoUsuario().setText("No son amigos.");
+        }else if(attributesList.get(position).getEstado()==2){
+            holder.getEstadoUsuario().setText("Esperando respuesta.");
+        }else if(attributesList.get(position).getEstado()==3){
+            holder.getEstadoUsuario().setText("¡Nueva!");
+        }else if(attributesList.get(position).getEstado()==4){
+            holder.getEstadoUsuario().setText("Amigos.");
+        }
 
-        holder.getEstadoUsuario().setText(""+attributesList.get(position).getEstado());
+        //holder.getEstadoUsuario().setText(""+attributesList.get(position).getEstado());
     }
 
     @Override

@@ -6,9 +6,8 @@ import com.chatapp.cdliii.mychatapp.Usuarios.Requests;
  * Created by ricky on 06-22-18.
  */
 
-public class DeleteRequestFromSearcher extends Requests {
-
-    public DeleteRequestFromSearcher(String id) {
+public class AcceptRequestFromSearcher extends Requests{
+    public AcceptRequestFromSearcher(String id) {
         super(id);
     }
 }

@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.chatapp.cdliii.mychatapp.Internet.SolicitudesJSON;
 import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
+import com.chatapp.cdliii.mychatapp.Usuarios.Amigos.FriendsAttributes;
+import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.AcceptRequestFromSearcher;
 import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.DeleteRequestFromSearcher;
 
 import org.greenrobot.eventbus.EventBus;
@@ -153,6 +155,48 @@ public class RequestsFriendsFragment extends Fragment {
                 actualizarTarjetas();
             }
         }
+    }
+
+    public void aceptarSolicitud(final String id){
+        String usuarioEmisor = Preferences.obtenerString(getContext(), Preferences.PREFERENCE_USUARIO_LOGIN);
+        SolicitudesJSON json = new SolicitudesJSON() {
+            @Override
+            public void solicitudCompletada(JSONObject object) {
+                String respuesta = null;
+                try {
+                    respuesta = object.getString("respuesta");
+                    if(respuesta.equals("200")){
+                        //
+                        bus.post(new AcceptRequestFromSearcher(id));
+                        eliminarTarjeta(id);
+                        FriendsAttributes friendsAttributes = new FriendsAttributes();
+                        friendsAttributes.setId(id);
+                        friendsAttributes.setNombre(object.getString("nombreCompleto"));
+                        friendsAttributes.setMensaje(object.getString("UltimoMensaje"));
+                        friendsAttributes.setFotoPerfil(R.drawable.ic_account_circle);
+                        friendsAttributes.setHora(object.getString("hora"));
+                        friendsAttributes.setType_mensaje(object.getString("type_mensaje"));
+                        bus.post(friendsAttributes);
+                        Toast.makeText(getContext(), "¡Ahora son amigos!", Toast.LENGTH_LONG).show();
+
+                    }else if(respuesta.equals("-1")){
+                        Toast.makeText(getContext(), "Error al enviar solicitud.", Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getContext(), "Error al enviar solicitud.", Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void solicitudErronea() {
+                Toast.makeText(getContext(), "Ocurrió un error al enviar la solicitud de amistad.", Toast.LENGTH_LONG).show();
+            }
+        };
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("emisor", usuarioEmisor);
+        hashMap.put("receptor", id);
+        json.POST(getContext(), SolicitudesJSON.URL_ACCEPT_A_REQUEST, hashMap);
     }
 
     public void SolicitudJSON(String URL){

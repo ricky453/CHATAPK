@@ -7,5 +7,13 @@ import com.chatapp.cdliii.mychatapp.Comunicacion.Usuario;
  */
 
 public class FriendsAttributes extends Usuario {
+    private String type_mensaje;
 
+    public String getType_mensaje() {
+        return type_mensaje;
+    }
+
+    public void setType_mensaje(String type_mensaje) {
+        this.type_mensaje = type_mensaje;
+    }
 }

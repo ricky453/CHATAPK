@@ -4,14 +4,14 @@ package com.chatapp.cdliii.mychatapp.Usuarios;
  * Created by ricky on 06-22-18.
  */
 
-public class DeleteRequests {
+public class Requests {
 
     private String id;
 
-    public DeleteRequests() {
+    public Requests() {
     }
 
-    public DeleteRequests(String id) {
+    public Requests(String id) {
         this.id = id;
     }
 

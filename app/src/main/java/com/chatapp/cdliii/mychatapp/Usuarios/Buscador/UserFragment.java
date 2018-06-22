@@ -16,6 +16,7 @@ import com.chatapp.cdliii.mychatapp.Comunicacion.Usuario;
 import com.chatapp.cdliii.mychatapp.Internet.SolicitudesJSON;
 import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
+import com.chatapp.cdliii.mychatapp.Usuarios.Amigos.FriendsAttributes;
 import com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes.DeleteRequestFromRequests;
 import com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes.Requests;
 
@@ -159,6 +160,11 @@ public class UserFragment extends android.support.v4.app.Fragment{
         cambiarEstado(deleteRequestFromSearcher.getId(), 1);
     }
 
+    @Subscribe
+    public void aceptarSolicitud(AcceptRequestFromSearcher acceptRequestFromSearcher){
+        cambiarEstado(acceptRequestFromSearcher.getId(), 4);
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -246,8 +252,46 @@ public class UserFragment extends android.support.v4.app.Fragment{
         json.POST(getContext(), SolicitudesJSON.URL_DELETE_A_REQUEST, hashMap);
     }
 
-    public void aceptarSolicitud(String id){
-        cambiarEstado(id, 4);
+    public void aceptarSolicitud(final String id){
+        String usuarioEmisor = Preferences.obtenerString(getContext(), Preferences.PREFERENCE_USUARIO_LOGIN);
+        SolicitudesJSON json = new SolicitudesJSON() {
+            @Override
+            public void solicitudCompletada(JSONObject object) {
+                String respuesta = null;
+                try {
+                    respuesta = object.getString("respuesta");
+                    if(respuesta.equals("200")){
+                        //
+                        cambiarEstado(id, 4);
+                        bus.post(new DeleteRequestFromRequests(id));
+                        FriendsAttributes friendsAttributes = new FriendsAttributes();
+                        friendsAttributes.setId(id);
+                        friendsAttributes.setNombre(object.getString("nombreCompleto"));
+                        friendsAttributes.setMensaje(object.getString("UltimoMensaje"));
+                        friendsAttributes.setFotoPerfil(R.drawable.ic_account_circle);
+                        friendsAttributes.setHora(object.getString("hora"));
+                        friendsAttributes.setType_mensaje(object.getString("type_mensaje"));
+                        bus.post(friendsAttributes);
+                        Toast.makeText(getContext(), "¡Ahora son amigos!", Toast.LENGTH_LONG).show();
+
+                    }else if(respuesta.equals("-1")){
+                        Toast.makeText(getContext(), "Error al enviar solicitud.", Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getContext(), "Error al enviar solicitud.", Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void solicitudErronea() {
+                Toast.makeText(getContext(), "Ocurrió un error al enviar la solicitud de amistad.", Toast.LENGTH_LONG).show();
+            }
+        };
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("emisor", usuarioEmisor);
+        hashMap.put("receptor", id);
+        json.POST(getContext(), SolicitudesJSON.URL_ACCEPT_A_REQUEST, hashMap);
     }
 
     public void eliminarAmigo(String id){

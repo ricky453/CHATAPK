@@ -2,6 +2,7 @@ package com.chatapp.cdliii.mychatapp.Usuarios.Amigos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,6 +41,20 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.HolderFr
         holder.nombre.setText(atributosList.get(position).getNombre());
         holder.mensaje.setText(atributosList.get(position).getMensaje());
         holder.hora.setText(atributosList.get(position).getHora());
+
+
+
+        if (atributosList.get(position).getMensaje().equals("null")){
+            holder.hora.setVisibility(View.GONE);
+            holder.mensaje.setText("¡Salúdame!");
+        }else {
+            holder.hora.setVisibility(View.VISIBLE);
+            if(atributosList.get(position).getType_mensaje().equals("1")){
+                //holder.mensaje.setTextColor(ContextCompat.getColor(context, android.R.color.darker_gray));
+            }else{
+                holder.mensaje.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
+            }
+        }
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

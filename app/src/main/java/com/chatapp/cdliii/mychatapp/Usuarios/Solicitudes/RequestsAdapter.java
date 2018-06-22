@@ -57,6 +57,19 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
             case 3:
                 holder.declinar.setHint("Declinar");
                 holder.aceptar.setVisibility(View.VISIBLE);
+                holder.declinar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        requestsFriendsFragment.cancelarSolicitud(requestsList.get(position).getId());
+                    }
+                });
+
+                holder.aceptar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        requestsFriendsFragment.aceptarSolicitud(requestsList.get(position).getId());
+                    }
+                });
                 break;
         }
 
