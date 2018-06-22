@@ -50,11 +50,18 @@
                         android:layout_weight="1"
                         android:gravity="center"/>
                     <Button
-                        android:id="@+id/enviarSolicitud"
+                        android:id="@+id/botonEstado3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="Enviar solicitud"
+                        android:hint="Aceptar"
                         android:backgroundTint="@color/home_green_dark"
+                        android:textColorHint="@color/white" />
+                    <Button
+                        android:id="@+id/botonCancelar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Cancelar"
+                        android:backgroundTint="#CC0000"
                         android:textColorHint="@color/white" />
 
                 </LinearLayout>

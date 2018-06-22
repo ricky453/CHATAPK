@@ -14,9 +14,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.chatapp.cdliii.mychatapp.Comunicacion.Usuario;
 import com.chatapp.cdliii.mychatapp.Inicio.LoginActivity;
+import com.chatapp.cdliii.mychatapp.Internet.SolicitudesJSON;
 import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
+import com.chatapp.cdliii.mychatapp.Usuarios.Amigos.FriendsAttributes;
+import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.UserAttributes;
+import com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes.Requests;
+import com.chatapp.cdliii.mychatapp.VolleyRP;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by ricky on 06-18-18.
@@ -26,6 +41,7 @@ public class UserActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private EventBus bus;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToogle;
@@ -35,6 +51,8 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usuarios);
         setTitle("Mensajeria");
+
+        bus = EventBus.getDefault();
 
         //Menu
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
@@ -68,6 +86,75 @@ public class UserActivity extends AppCompatActivity {
 
             }
         });
+        viewPager.setOffscreenPageLimit(3);
+        String usuario = Preferences.obtenerString(this, Preferences.PREFERENCE_USUARIO_LOGIN);
+        SolicitudesJSON sj = new SolicitudesJSON() {
+            @Override
+            public void solicitudCompletada(JSONObject object) {
+                try {
+                    JSONArray jsonArray = object.getJSONArray("resultado");
+                    for(int i = 0; i<jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String id = jsonObject.getString("idUsuario");
+                        if(!id.equals(Preferences.obtenerString(UserActivity.this, Preferences.PREFERENCE_USUARIO_LOGIN))) {
+                            String nombreCompleto = jsonObject.getString("Nombres") + " "
+                                    + jsonObject.getString("Apellidos");
+                            String estado = jsonObject.getString("estado");
+                            UserAttributes usuario = new UserAttributes();
+                            Requests requests;
+                            usuario.setId(id);
+                            usuario.setNombre(nombreCompleto);
+                            usuario.setEstado(1);
+                            usuario.setFotoPerfil(R.drawable.ic_account_circle);
+                            switch (estado) {
+                                case "2": //Solicitud
+                                    usuario.setEstado(2);
+                                    requests = new Requests();
+                                    requests.setId(id);
+                                    requests.setNombre(nombreCompleto);
+                                    requests.setFotoPerfil(R.drawable.ic_account_circle);
+                                    requests.setHora(jsonObject.getString("fecha_amigos"));
+                                    requests.setEstado(2);
+                                    bus.post(requests);
+                                    break;
+                                case "3": //Solicitud
+                                    usuario.setEstado(3);
+                                    requests = new Requests();
+                                    requests.setId(id);
+                                    requests.setNombre(nombreCompleto);
+                                    requests.setFotoPerfil(R.drawable.ic_account_circle);
+                                    requests.setHora(jsonObject.getString("fecha_amigos"));
+                                    requests.setEstado(3);
+                                    bus.post(requests);
+                                    break;
+                                case "4": //Son amigos
+                                    usuario.setEstado(4);
+                                    FriendsAttributes friendsAttributes = new FriendsAttributes();
+                                    friendsAttributes.setId(id);
+                                    friendsAttributes.setNombre(nombreCompleto);
+                                    friendsAttributes.setFotoPerfil(R.drawable.ic_account_circle);
+                                    friendsAttributes.setMensaje(jsonObject.getString("mensaje"));
+                                    String hora_mensaje = jsonObject.getString("hora_del_mensaje");
+                                    String hora_vector[] = hora_mensaje.split(",");
+                                    friendsAttributes.setHora(hora_vector[0]);
+                                    friendsAttributes.setEstado(4);
+                                    bus.post(friendsAttributes);
+                                    break;
+                            }
+                            bus.post(usuario);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void solicitudErronea() {
+                Toast.makeText(UserActivity.this, "Ocurrió un error al pedir datos en UserActivity.", Toast.LENGTH_LONG).show();
+            }
+        };
+        sj.GET(this, SolicitudesJSON.URL_GET_ALL_DATA+usuario);
     }
     public boolean onOptionsItemSelected(MenuItem item){
         if(mToogle.onOptionsItemSelected(item)){
@@ -98,4 +185,5 @@ public class UserActivity extends AppCompatActivity {
             }
         });
     }
+
 }

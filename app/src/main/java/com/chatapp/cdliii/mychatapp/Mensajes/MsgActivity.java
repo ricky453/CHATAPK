@@ -10,7 +10,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.support.v7.widget.Toolbar;
@@ -21,11 +23,12 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.chatapp.cdliii.mychatapp.Internet.SolicitudesJSON;
 import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
 import com.chatapp.cdliii.mychatapp.VolleyRP;
-import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -100,30 +103,70 @@ public class MsgActivity extends AppCompatActivity {
                 }
 ;            }
         });
+        etEscribirMensaje.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rv.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).isActive()){
+                            setScrollbarChat();
+                        }else{
+                            rv.postDelayed(this, 100);
+                        }
+                    }
+                }, 100);
+            }
+        });
 
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     finish();
                 }
-            });
-
-            setScrollbarChat();
-            broadcastReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    String mensaje = intent.getStringExtra("key_mensaje");
-                    String hora = intent.getStringExtra("key_hora");
-                    String horaParametros[] = hora.split(",");
-                    String emisor = intent.getStringExtra("key_emisor_PHP");
-                    if(emisor.equals(RECEPTOR)){
-                        createMsg(mensaje, horaParametros[0], 2);
-                    }
+        });
+        setScrollbarChat();
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String mensaje = intent.getStringExtra("key_mensaje");
+                String hora = intent.getStringExtra("key_hora");
+                String horaParametros[] = hora.split(",");
+                String emisor = intent.getStringExtra("key_emisor_PHP");
+                if(emisor.equals(RECEPTOR)){
+                    createMsg(mensaje, horaParametros[0], 2);
                 }
-            };
-    }
+            }
+        };
+        SolicitudesJSON json = new SolicitudesJSON() {
+            @Override
+            public void solicitudCompletada(JSONObject object) {
+                try {
+                    JSONArray jsonArray = object.getJSONArray("resultado");
+                    for(int i = 0; i<jsonArray.length(); i++){
+                        JSONObject jo = jsonArray.getJSONObject(i);
+                        String mensaje = jo.getString("mensaje");
+                        String hora = jo.getString("hora_del_mensaje").split(",")[0];
+                        int tipo = jo.getInt("tipo_mensaje");
+                        createMsg(mensaje, hora, tipo);
+                    }
 
+                } catch (JSONException e) {
+                    Toast.makeText(MsgActivity.this, "Ocurrió un error al descomprimir los mensajes.", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void solicitudErronea() {
+
+            }
+        };
+        HashMap <String, String> hashMap = new HashMap<>();
+        hashMap.put("emisor", EMISOR);
+        hashMap.put("receptor", RECEPTOR);
+        json.POST(this, SolicitudesJSON.URL_GET_ALL_MSG,hashMap);
+    }
 
     private void sendMsg(){
         HashMap<String, String> hashMap = new HashMap<>();
@@ -168,11 +211,9 @@ public class MsgActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(MENSAJE));
-
     }
 
     public void setScrollbarChat(){
         rv.scrollToPosition(adapter.getItemCount()-1);
-
     }
 }

@@ -38,7 +38,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.HolderFr
     public void onBindViewHolder(HolderFriends holder, final int position) {
         holder.imageView.setImageResource(R.drawable.ic_account_circle);
         holder.nombre.setText(atributosList.get(position).getNombre());
-        holder.mensaje.setText(atributosList.get(position).getUltimoMensaje());
+        holder.mensaje.setText(atributosList.get(position).getMensaje());
         holder.hora.setText(atributosList.get(position).getHora());
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {

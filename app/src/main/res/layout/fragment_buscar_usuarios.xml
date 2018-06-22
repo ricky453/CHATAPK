@@ -16,7 +16,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/card_view_buscar_usuarios">
-
     </android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:id="@+id/layoutVacioBuscarUsuarios"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_emo_err"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No se produjo ningún resultado."/>
+    </LinearLayout>
 
 </LinearLayout>

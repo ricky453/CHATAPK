@@ -41,6 +41,17 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
         holder.nombre.setText(requestsList.get(position).getNombre());
         holder.hora.setText(requestsList.get(position).getHora());
 
+        switch (requestsList.get(position).getEstado()){
+            case 2:
+                holder.declinar.setHint("Cancelar solicitud");
+                holder.aceptar.setVisibility(View.GONE);
+                break;
+            case 3:
+                holder.declinar.setHint("Declinar");
+                holder.aceptar.setVisibility(View.VISIBLE);
+                break;
+        }
+
     }
 
     @Override

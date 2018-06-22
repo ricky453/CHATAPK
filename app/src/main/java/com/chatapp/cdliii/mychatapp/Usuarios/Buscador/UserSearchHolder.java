@@ -1,5 +1,6 @@
 package com.chatapp.cdliii.mychatapp.Usuarios.Buscador;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -17,14 +18,18 @@ public class UserSearchHolder extends RecyclerView.ViewHolder{
     private ImageView fotoPerfil;
     private TextView nameUsuario;
     private TextView estadoUsuario;
-    private Button enviarSolicitud;
+    private Button botonCancelar;
+    private Button botonAfirmar;
+    private CardView cardView;
 
     public UserSearchHolder(View itemView) {
         super(itemView);
+        cardView = (CardView) itemView.findViewById(R.id.cardViewEnviarSolicitudAmistad);
         fotoPerfil = (ImageView) itemView.findViewById(R.id.fotoPerfilEnviarSolicitud);
         nameUsuario = (TextView) itemView.findViewById(R.id.nombreUsuarioEnviarSolicitud);
         estadoUsuario = (TextView) itemView.findViewById(R.id.estadoUsuario);
-        enviarSolicitud = (Button) itemView.findViewById(R.id.enviarSolicitud);
+        botonCancelar = (Button) itemView.findViewById(R.id.botonCancelar);
+        botonAfirmar = (Button) itemView.findViewById(R.id.botonEstado3);
     }
 
     public ImageView getFotoPerfil() {
@@ -51,11 +56,27 @@ public class UserSearchHolder extends RecyclerView.ViewHolder{
         this.estadoUsuario = estadoUsuario;
     }
 
-    public Button getEnviarSolicitud() {
-        return enviarSolicitud;
+    public Button getBotonCancelar() {
+        return botonCancelar;
     }
 
-    public void setEnviarSolicitud(Button enviarSolicitud) {
-        this.enviarSolicitud = enviarSolicitud;
+    public void setBotonCancelar(Button botonCancelar) {
+        this.botonCancelar = botonCancelar;
+    }
+
+    public Button getBotonAfirmar() {
+        return botonAfirmar;
+    }
+
+    public void setBotonAfirmar(Button botonAfirmar) {
+        this.botonAfirmar = botonAfirmar;
+    }
+
+    public CardView getCardView() {
+        return cardView;
+    }
+
+    public void setCardView(CardView cardView) {
+        this.cardView = cardView;
     }
 }
