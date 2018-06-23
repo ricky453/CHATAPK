@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/mensajeria" android:title="Mensajería y amigos" android:icon="@drawable/ic_chat"/>
-    <item android:id="@+id/invitar" android:title="Invitar" android:icon="@drawable/ic_record_voice_over"/>
-    <item android:id="@+id/configuracion" android:title="Configuración" android:icon="@drawable/ic_person_add"/>
-    <item android:id="@+id/salir" android:title="Cerrar sesión" android:icon="@drawable/ic_exit_to_app"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+        <item android:title="Mensajeria y Perfil">
+            <menu>
+                <item android:id="@+id/mensajeria" android:title="Mensajería" android:icon="@drawable/ic_chat"/>
+                <item android:id="@+id/perfil" android:title="Perfil" android:icon="@drawable/ic_user"/>
+            </menu>
+        </item>
+        <item android:title="Extras">
+            <menu>
+                <item android:id="@+id/invitar" android:title="Invitar" android:icon="@drawable/ic_record_voice_over"/>
+                <item android:id="@+id/salir" android:title="Cerrar sesión" android:icon="@drawable/ic_exit_to_app"/>
+            </menu>
+        </item>
+    </group>
 </menu>

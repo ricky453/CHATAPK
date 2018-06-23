@@ -3,6 +3,7 @@ package com.chatapp.cdliii.mychatapp.Usuarios;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -15,12 +16,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.chatapp.cdliii.mychatapp.Comunicacion.Usuario;
 import com.chatapp.cdliii.mychatapp.Inicio.LoginActivity;
 import com.chatapp.cdliii.mychatapp.Internet.SolicitudesJSON;
 import com.chatapp.cdliii.mychatapp.Preferences;
@@ -28,7 +23,6 @@ import com.chatapp.cdliii.mychatapp.R;
 import com.chatapp.cdliii.mychatapp.Usuarios.Amigos.FriendsAttributes;
 import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.UserAttributes;
 import com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes.Requests;
-import com.chatapp.cdliii.mychatapp.VolleyRP;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -50,13 +44,17 @@ public class UserActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToogle;
 
+    private TextView nombre;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usuarios);
-        setTitle("Mensajeria");
+        setTitle("Mensajería");
 
         bus = EventBus.getDefault();
+
+        nombre = (TextView) findViewById(R.id.txtNombre);
 
         //Menu
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
@@ -72,7 +70,9 @@ public class UserActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setAdapter(new UserAdapter(getSupportFragmentManager()));
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -172,11 +172,16 @@ public class UserActivity extends AppCompatActivity {
         Fragment fragment = null;
         Class fragmentClass;
         switch (item.getItemId()){
+            case R.id.mensajeria:
+                break;
+            case R.id.perfil:
+                Toast.makeText(this, "Este es mi perfil.", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.salir:
                 Preferences.savePreferenceBoolean(UserActivity.this, false, Preferences.PREFERENCE_ESTADO);
+                subirToken(Preferences.obtenerString(UserActivity.this, Preferences.PREFERENCE_USUARIO_LOGIN));
                 Intent intent = new Intent(UserActivity.this, LoginActivity.class);
                 startActivity(intent);
-                subirToken(Preferences.obtenerString(UserActivity.this, Preferences.PREFERENCE_USUARIO_LOGIN));
                 break;
         }
     }

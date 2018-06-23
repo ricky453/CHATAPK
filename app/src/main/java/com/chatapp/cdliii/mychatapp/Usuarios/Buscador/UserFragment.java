@@ -123,34 +123,6 @@ public class UserFragment extends android.support.v4.app.Fragment{
         adapter.notifyDataSetChanged();
         verificarUsuarios();
     }
-    public void SolicitudJSON(){
-        /*JsonObjectRequest solicitud = new JsonObjectRequest(URL_GET_ALL_USERS, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    String todosDatos = response.getString("resultado");
-                    JSONArray jsonArray = new JSONArray(todosDatos);
-                    String miUsuario = Preferences.obtenerString(getContext(), Preferences.PREFERENCE_USUARIO_LOGIN);
-                    for(int i=0; i<jsonArray.length(); i++){
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        if(!miUsuario.equals(jsonObject.getString("idUsuario"))){
-                            insertarUsuarios(R.drawable.ic_account_circle, jsonObject.getString("Nombres")+" "+jsonObject.getString("Apellidos"), 1, jsonObject.getString("idUsuario"));
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "¡Ocurrió un error al descomponer el JSON!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener(){
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext(), "¡Ocurrió un error!, por favor conéctese con el administrador.", Toast.LENGTH_SHORT).show();
-            }
-        });
-        VolleyRP.addToQueue(solicitud, mRequest, getContext(), volley);*/
-    }
 
     @Subscribe
     public void ejecutarLlamada(UserAttributes attributes){

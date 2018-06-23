@@ -14,7 +14,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.chatapp.cdliii.mychatapp.Internet.SolicitudesJSON;
-import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
 import com.chatapp.cdliii.mychatapp.VolleyRP;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -36,6 +35,7 @@ public class RegistroActivity extends AppCompatActivity {
     private EditText correo;
     private EditText telefono;
     private Button registro;
+    private Button atras;
 
     private VolleyRP volley;
     private RequestQueue mRequest;
@@ -57,6 +57,7 @@ public class RegistroActivity extends AppCompatActivity {
         correo =(EditText) findViewById(R.id.correoRegistro);
         telefono =(EditText) findViewById(R.id.telefonoRegistro);
         registro =(Button) findViewById(R.id.btnRegistrarRegistro);
+        atras = (Button)findViewById(R.id.btnAtrasRegistro);
 
         volley = VolleyRP.getInstance(this);
         mRequest = volley.getRequestQueue();
@@ -80,6 +81,12 @@ public class RegistroActivity extends AppCompatActivity {
                 }
             }
 
+        });
+        atras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
         });
 
     }
