@@ -16,6 +16,7 @@ import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.DeleteFriendFromSearcher;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -81,7 +82,7 @@ public class FriendsFragment extends android.support.v4.app.Fragment {
     }
 
     public void agregarAmigos(FriendsAttributes attributes){
-        attributesList.add(attributes);
+        attributesList.add(0, attributes);
         adapter.notifyDataSetChanged();
         verificarAmigos();
     }
@@ -115,12 +116,12 @@ public class FriendsFragment extends android.support.v4.app.Fragment {
         VolleyRP.addToQueue(solicitud, mRequest, getContext(), volley);*/
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void ejecutarLlamada(FriendsAttributes attributes){
         agregarAmigos(attributes);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void eliminarAmigo(DeleteFriendFromFriends friends){
         for(int i=0; i<attributesList.size(); i++){
             if(attributesList.get(i).getId().equals(friends.getId())){

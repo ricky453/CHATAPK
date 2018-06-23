@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/chats" android:title="Chats" android:icon="@drawable/ic_chat"/>
-    <item android:id="@+id/buscar" android:title="Agregar" android:icon="@drawable/ic_person_add"/>
+    <item android:id="@+id/mensajeria" android:title="Mensajería y amigos" android:icon="@drawable/ic_chat"/>
     <item android:id="@+id/invitar" android:title="Invitar" android:icon="@drawable/ic_record_voice_over"/>
+    <item android:id="@+id/configuracion" android:title="Configuración" android:icon="@drawable/ic_person_add"/>
     <item android:id="@+id/salir" android:title="Cerrar sesión" android:icon="@drawable/ic_exit_to_app"/>
 </menu>

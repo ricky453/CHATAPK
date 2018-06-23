@@ -50,7 +50,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.HolderFr
 
 
 
-        if (atributosList.get(position).getMensaje().equals("null")){
+        if (atributosList.get(position).getMensaje()=="null"){
             holder.hora.setVisibility(View.GONE);
             holder.mensaje.setText("¡Salúdame!");
         }else {

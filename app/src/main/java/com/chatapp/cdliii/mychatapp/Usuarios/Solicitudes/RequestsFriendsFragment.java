@@ -19,6 +19,7 @@ import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.DeleteRequestFromSearcher;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -107,12 +108,12 @@ public class RequestsFriendsFragment extends Fragment {
         bus.register(this);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void ejecutarLlamada(Requests requests){
         agregarTarjetasSolicitud(requests);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void cancelarSolicitud(DeleteRequestFromRequests d){
         eliminarTarjeta(d.getId());
     }

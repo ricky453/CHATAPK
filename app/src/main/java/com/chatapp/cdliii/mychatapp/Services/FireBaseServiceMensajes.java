@@ -12,8 +12,18 @@ import android.support.v4.app.NotificationCompat.Builder;
 import com.chatapp.cdliii.mychatapp.Mensajes.MsgActivity;
 import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
+import com.chatapp.cdliii.mychatapp.Usuarios.Amigos.DeleteFriendFromFriends;
+import com.chatapp.cdliii.mychatapp.Usuarios.Amigos.FriendsAttributes;
+import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.AcceptRequestFromSearcher;
+import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.DeleteFriendFromSearcher;
+import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.DeleteRequestFromSearcher;
+import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.GetFriendRequestFromSearcher;
+import com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes.DeleteRequestFromRequests;
+import com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes.Requests;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Random;
 
@@ -22,6 +32,7 @@ import java.util.Random;
  */
 
 public class FireBaseServiceMensajes extends FirebaseMessagingService{
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -41,8 +52,42 @@ public class FireBaseServiceMensajes extends FirebaseMessagingService{
                 }
                 break;
             case "solicitud":
-                String usuario_envio_solicitud = remoteMessage.getData().get("user_envio_solicitud");
-                showNotification(cabecera, cuerpo);
+                String sub_tipo = remoteMessage.getData().get("sub_type");
+                String usuario_envio_solicitud;
+                switch(sub_tipo){
+                    case "enviar_solicitud":
+                        EventBus.getDefault().post(new Requests(remoteMessage.getData().get("user_envio_solicitud"),
+                                remoteMessage.getData().get("user_envio_solicitud_nombre"),
+                                3,
+                                remoteMessage.getData().get("hora"),
+                                R.drawable.ic_account_circle));
+                        EventBus.getDefault().post(new GetFriendRequestFromSearcher(remoteMessage.getData().get("user_envio_solicitud")));
+                        remoteMessage.getData().get("user_envio_solicitud");
+                        showNotification(cabecera, cuerpo);
+                        break;
+                    case "cancelar_solicitud":
+                        EventBus.getDefault().post(new DeleteRequestFromSearcher(remoteMessage.getData().get("user_envio_solicitud")));
+                        EventBus.getDefault().post(new DeleteRequestFromRequests(remoteMessage.getData().get("user_envio_solicitud")));
+                        break;
+                    case "aceptar_solicitud":
+                        EventBus.getDefault().post(new FriendsAttributes(remoteMessage.getData().get("user_envio_solicitud"),
+                                remoteMessage.getData().get("user_envio_solicitud_nombre"),
+                                remoteMessage.getData().get("ultimoMensaje")==null?"null":remoteMessage.getData().get("ultimoMensaje"),
+                                remoteMessage.getData().get("hora_del_mensaje")==null?
+                                        null:remoteMessage.getData().get("hora_del_mensaje").split(",")[0],
+                                R.drawable.ic_account_circle,
+                                remoteMessage.getData().get("type_mensaje")==null?null:remoteMessage.getData().get("type_mensaje")));
+                        EventBus.getDefault().post(new DeleteRequestFromRequests(remoteMessage.getData().get("user_envio_solicitud")));
+                        remoteMessage.getData().get("user_envio_solicitud");
+                        EventBus.getDefault().post(new AcceptRequestFromSearcher(remoteMessage.getData().get("user_envio_solicitud")));
+                        showNotification(cabecera, cuerpo);
+                        break;
+                    case "eliminar_amigo":
+                        EventBus.getDefault().post(new DeleteRequestFromSearcher(remoteMessage.getData().get("user_envio_solicitud")));
+                        EventBus.getDefault().post(new DeleteFriendFromFriends(remoteMessage.getData().get("user_envio_solicitud")));
+                        break;
+
+                }
                 break;
         }
 

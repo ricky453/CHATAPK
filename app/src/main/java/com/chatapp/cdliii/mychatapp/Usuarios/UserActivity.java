@@ -12,8 +12,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -32,6 +34,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * Created by ricky on 06-18-18.
@@ -172,7 +176,7 @@ public class UserActivity extends AppCompatActivity {
                 Preferences.savePreferenceBoolean(UserActivity.this, false, Preferences.PREFERENCE_ESTADO);
                 Intent intent = new Intent(UserActivity.this, LoginActivity.class);
                 startActivity(intent);
-                finish();
+                subirToken(Preferences.obtenerString(UserActivity.this, Preferences.PREFERENCE_USUARIO_LOGIN));
                 break;
         }
     }
@@ -185,6 +189,27 @@ public class UserActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void subirToken(String id) {
+        SolicitudesJSON json = new SolicitudesJSON() {
+            @Override
+            public void solicitudCompletada(JSONObject object) {
+                Toast.makeText(UserActivity.this, "Cerró sesión.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void solicitudErronea() {
+                Toast.makeText(UserActivity.this, "No se pudo subir el token.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        };
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("id", id);
+        hashMap.put("token", "0");
+        json.POST(this, SolicitudesJSON.IP_TOKEN_UPLOAD, hashMap);
+
     }
 
 }

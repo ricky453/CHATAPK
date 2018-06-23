@@ -51,6 +51,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
                         fragment.enviarSolicitud(attributesList.get(position).getId());
                     }
                 });
+                holder.getCardView().setOnLongClickListener(null);
                 break;
             case 2: //Solicitud pendiente a que el usuario receptor acepte
                 holder.getBotonCancelar().setVisibility(View.VISIBLE);
@@ -62,6 +63,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
                         fragment.cancelarSolicitud(attributesList.get(position).getId());
                     }
                 });
+                holder.getCardView().setOnLongClickListener(null);
                 break;
             case 3: //Solicitud pendiente a aceptar
                 holder.getBotonAfirmar().setVisibility(View.VISIBLE);
@@ -80,6 +82,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
                         fragment.cancelarSolicitud(attributesList.get(position).getId());
                     }
                 });
+                holder.getCardView().setOnLongClickListener(null);
                 break;
             case 4: //Son amigos
                 holder.getBotonCancelar().setVisibility(View.GONE);

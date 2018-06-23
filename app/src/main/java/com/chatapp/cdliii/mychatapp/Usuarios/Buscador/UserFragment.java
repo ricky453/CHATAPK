@@ -23,6 +23,7 @@ import com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes.Requests;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -156,19 +157,24 @@ public class UserFragment extends android.support.v4.app.Fragment{
         insertarUsuarios(attributes);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void cancelarSolicitud(DeleteRequestFromSearcher deleteRequestFromSearcher){
         cambiarEstado(deleteRequestFromSearcher.getId(), 1);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void aceptarSolicitud(AcceptRequestFromSearcher acceptRequestFromSearcher){
         cambiarEstado(acceptRequestFromSearcher.getId(), 4);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void eliminarUsuario(DeleteFriendFromSearcher deleteFriendFromSearcher){
         cambiarEstado(deleteFriendFromSearcher.getId(), 1);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void recibirSolicitud(GetFriendRequestFromSearcher getFriendRequestFromSearcher){
+        cambiarEstado(getFriendRequestFromSearcher.getId(), 3);
     }
 
     @Override
@@ -189,9 +195,8 @@ public class UserFragment extends android.support.v4.app.Fragment{
         SolicitudesJSON json = new SolicitudesJSON() {
             @Override
             public void solicitudCompletada(JSONObject object) {
-                String respuesta = null;
                 try {
-                    respuesta = object.getString("respuesta");
+                    String respuesta = object.getString("respuesta");
                     if(respuesta.equals("200")){
                         //correcto
                         Toast.makeText(getContext(), "Se envió correctamente.", Toast.LENGTH_LONG).show();
@@ -205,7 +210,6 @@ public class UserFragment extends android.support.v4.app.Fragment{
                         requests.setNombre(nombreCompleto);
                         requests.setHora(hora);
                         requests.setFotoPerfil(R.drawable.ic_account_circle);
-
                         bus.post(requests);
                         cambiarEstado(id, 2);
                     }else if(respuesta.equals("-1")){
@@ -335,11 +339,13 @@ public class UserFragment extends android.support.v4.app.Fragment{
     private void cambiarEstado(String id, int estado){
         for(int i = 0; i< listAuxiliar.size(); i++){
             if(listAuxiliar.get(i).getId().equals(id)){
+                System.out.println("el ultimo cayo en "+listAuxiliar.get(i).getId());
                 listAuxiliar.get(i).setEstado(estado);
             }
         }
         int posicionUsuario = -1;
         for(int i = 0; i< attributesList.size(); i++){
+            System.out.println("Posicion del usuario "+attributesList.get(i).getId()+" y el id es "+id);
             if(attributesList.get(i).getId().equals(id)){
                 attributesList.get(i).setEstado(estado);
                 posicionUsuario = i;
