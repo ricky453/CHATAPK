@@ -1,8 +1,10 @@
 package com.chatapp.cdliii.mychatapp.Usuarios.Amigos;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chatapp.cdliii.mychatapp.Mensajes.MsgActivity;
 import com.chatapp.cdliii.mychatapp.R;
@@ -24,9 +27,12 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.HolderFr
 
     private List<FriendsAttributes> atributosList;
     private Context context;
-    public FriendsAdapter(List<FriendsAttributes> attributesList, Context context){
+    private FriendsFragment fragment;
+
+    public FriendsAdapter(List<FriendsAttributes> attributesList, Context context, FriendsFragment fragment){
         this.atributosList = attributesList;
         this.context = context;
+        this.fragment = fragment;
     }
 
     @Override
@@ -62,6 +68,27 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.HolderFr
                 Intent i = new Intent(context, MsgActivity.class);
                 i.putExtra("key_receptor", atributosList.get(position).getId());
                 context.startActivity(i);
+            }
+        });
+
+        holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new AlertDialog.Builder(context).
+                        setMessage("Estás a punto de eliminar a este amigo, ¿Deseas eliminarlo?").
+                        setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                fragment.eliminarAmigo(atributosList.get(position).getId());
+                                Toast.makeText(context, "Se eliminó de tu lista de amigos.", Toast.LENGTH_LONG).show();
+                            }
+                        }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).show();
+                return true;
             }
         });
     }

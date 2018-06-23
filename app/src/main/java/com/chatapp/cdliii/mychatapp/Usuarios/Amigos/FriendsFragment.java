@@ -9,21 +9,18 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.chatapp.cdliii.mychatapp.Internet.SolicitudesJSON;
 import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
-import com.chatapp.cdliii.mychatapp.VolleyRP;
+import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.DeleteFriendFromSearcher;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -53,7 +50,7 @@ public class FriendsFragment extends android.support.v4.app.Fragment {
         //lm.setStackFromEnd(true);
         rv.setLayoutManager(lm);
 
-        adapter = new FriendsAdapter(attributesList, getContext());
+        adapter = new FriendsAdapter(attributesList, getContext(), this);
         rv.setAdapter(adapter);
 
         verificarAmigos();
@@ -121,6 +118,59 @@ public class FriendsFragment extends android.support.v4.app.Fragment {
     @Subscribe
     public void ejecutarLlamada(FriendsAttributes attributes){
         agregarAmigos(attributes);
+    }
+
+    @Subscribe
+    public void eliminarAmigo(DeleteFriendFromFriends friends){
+        for(int i=0; i<attributesList.size(); i++){
+            if(attributesList.get(i).getId().equals(friends.getId())){
+                attributesList.remove(i);
+                actualizarTarjetas();
+            }
+        }
+    }
+
+    public void eliminarAmigo(final String id){
+
+        String usuarioEmisor = Preferences.obtenerString(getContext(), Preferences.PREFERENCE_USUARIO_LOGIN);
+        SolicitudesJSON json = new SolicitudesJSON() {
+            @Override
+            public void solicitudCompletada(JSONObject object) {
+                String respuesta = null;
+                try {
+                    respuesta = object.getString("respuesta");
+                    if(respuesta.equals("200")){
+                        //Correcta
+                        bus.post(new DeleteFriendFromSearcher(id));
+                        for(int i=0; i<attributesList.size(); i++){
+                            if(attributesList.get(i).getId().equals(id)){
+                                attributesList.remove(i);
+                                actualizarTarjetas();
+                            }
+                        }
+                        //Toast.makeText(getContext(), "Se ha eliminado de tu lista de amigos.", Toast.LENGTH_LONG).show();
+
+                    }else if(respuesta.equals("-1")){
+                        Toast.makeText(getContext(), "Error al eliminar el usuario.", Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getContext(), "Error al eliminar el usuario.", Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void solicitudErronea() {
+                Toast.makeText(getContext(), "Ocurrió un error al eliminar el usuario.", Toast.LENGTH_LONG).show();
+            }
+        };
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("emisor", usuarioEmisor);
+        hashMap.put("receptor", id);
+        json.POST(getContext(), SolicitudesJSON.URL_DELETE_A_FRIEND, hashMap);
+    }
+
+    private void actualizarTarjetas(){
+        adapter.notifyDataSetChanged();
+        verificarAmigos();
     }
 
     @Override

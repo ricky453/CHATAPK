@@ -16,6 +16,7 @@ import com.chatapp.cdliii.mychatapp.Comunicacion.Usuario;
 import com.chatapp.cdliii.mychatapp.Internet.SolicitudesJSON;
 import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
+import com.chatapp.cdliii.mychatapp.Usuarios.Amigos.DeleteFriendFromFriends;
 import com.chatapp.cdliii.mychatapp.Usuarios.Amigos.FriendsAttributes;
 import com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes.DeleteRequestFromRequests;
 import com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes.Requests;
@@ -165,6 +166,11 @@ public class UserFragment extends android.support.v4.app.Fragment{
         cambiarEstado(acceptRequestFromSearcher.getId(), 4);
     }
 
+    @Subscribe
+    public void eliminarUsuario(DeleteFriendFromSearcher deleteFriendFromSearcher){
+        cambiarEstado(deleteFriendFromSearcher.getId(), 1);
+    }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -294,8 +300,36 @@ public class UserFragment extends android.support.v4.app.Fragment{
         json.POST(getContext(), SolicitudesJSON.URL_ACCEPT_A_REQUEST, hashMap);
     }
 
-    public void eliminarAmigo(String id){
-        cambiarEstado(id, 1);
+    public void eliminarAmigo(final String id){
+        String usuarioEmisor = Preferences.obtenerString(getContext(), Preferences.PREFERENCE_USUARIO_LOGIN);
+        SolicitudesJSON json = new SolicitudesJSON() {
+            @Override
+            public void solicitudCompletada(JSONObject object) {
+                String respuesta = null;
+                try {
+                    respuesta = object.getString("respuesta");
+                    if(respuesta.equals("200")){
+                        //Correcta
+                        cambiarEstado(id, 1);
+                        bus.post(new DeleteFriendFromFriends(id));
+                        Toast.makeText(getContext(), "Se ha eliminado de tu lista de amigos.", Toast.LENGTH_LONG).show();
+
+                    }else if(respuesta.equals("-1")){
+                        Toast.makeText(getContext(), "Error al eliminar el usuario.", Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    Toast.makeText(getContext(), "Error al eliminar el usuario.", Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void solicitudErronea() {
+                Toast.makeText(getContext(), "Ocurrió un error al eliminar el usuario.", Toast.LENGTH_LONG).show();
+            }
+        };
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("emisor", usuarioEmisor);
+        hashMap.put("receptor", id);
+        json.POST(getContext(), SolicitudesJSON.URL_DELETE_A_FRIEND, hashMap);
     }
 
     private void cambiarEstado(String id, int estado){
