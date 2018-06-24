@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,6 +57,8 @@ public class MsgActivity extends AppCompatActivity {
     private String EMISOR = "";
     private String MENSAJE_ENVIAR = "";
     private String RECEPTOR;
+
+    private Calendar calendar = Calendar.getInstance();
 
     private static final String IP_MENSAJE = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Enviar_Mensajes.php";
 
@@ -98,7 +101,10 @@ public class MsgActivity extends AppCompatActivity {
                 if(!mensaje.isEmpty() && !RECEPTOR.isEmpty()){
                     MENSAJE_ENVIAR = mensaje;
                     sendMsg();
-                    createMsg(mensaje,"0:00", 1);
+                    int hora = calendar.get(Calendar.HOUR_OF_DAY);
+                    int minutos = calendar.get(Calendar.MINUTE);
+
+                    createMsg(mensaje,""+hora+":"+minutos, 1);
                     etEscribirMensaje.setText("");
                 }
 ;            }
