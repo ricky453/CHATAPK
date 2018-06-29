@@ -150,8 +150,6 @@ public class UserActivity extends AppCompatActivity {
                                     friendsAttributes.setFotoPerfil(R.drawable.ic_account_circle);
                                     friendsAttributes.setType_mensaje(jsonObject.getString("tipo_mensaje"));
                                     friendsAttributes.setMensaje(jsonObject.getString("mensaje"));
-                                    friendsAttributes.setCorreo(jsonObject.getString("Correo"));
-                                    friendsAttributes.setTelefono(jsonObject.getString("Telefono"));
                                     String hora_mensaje = jsonObject.getString("hora_del_mensaje");
                                     String hora_vector[] = hora_mensaje.split(",");
                                     friendsAttributes.setHora(hora_vector[0]);

@@ -252,8 +252,8 @@ public class UserFragment extends android.support.v4.app.Fragment{
                         friendsAttributes.setMensaje(object.getString("UltimoMensaje"));
                         friendsAttributes.setFotoPerfil(R.drawable.ic_account_circle);
                         friendsAttributes.setHora(object.getString("hora"));
-                        friendsAttributes.setCorreo(object.getString("Correo"));
-                        friendsAttributes.setTelefono(object.getString("Telefono"));
+                        //friendsAttributes.setCorreo(object.getString("Correo"));
+                        //friendsAttributes.setTelefono(object.getString("Telefono"));
                         friendsAttributes.setType_mensaje(object.getString("type_mensaje"));
                         bus.post(friendsAttributes);
                         Toast.makeText(getContext(), "¡Ahora son amigos!", Toast.LENGTH_LONG).show();
