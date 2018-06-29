@@ -20,6 +20,7 @@ import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.DeleteRequestFromSearcher;
 import com.chatapp.cdliii.mychatapp.Usuarios.Buscador.GetFriendRequestFromSearcher;
 import com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes.DeleteRequestFromRequests;
 import com.chatapp.cdliii.mychatapp.Usuarios.Solicitudes.Requests;
+import com.chatapp.cdliii.mychatapp.Usuarios.UserActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -102,7 +103,7 @@ public class FireBaseServiceMensajes extends FirebaseMessagingService{
     }
 
     private void showNotification(String cabecera, String cuerpo){
-        Intent i = new Intent(this, MsgActivity.class);
+        Intent i = new Intent(this, UserActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_ONE_SHOT);
 
         Uri soundNotificacion = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

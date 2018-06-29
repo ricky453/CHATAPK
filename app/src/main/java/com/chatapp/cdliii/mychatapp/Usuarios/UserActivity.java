@@ -1,13 +1,10 @@
 package com.chatapp.cdliii.mychatapp.Usuarios;
 
 import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -182,6 +179,7 @@ public class UserActivity extends AppCompatActivity {
     public void selectIterDrawer(MenuItem item){
         switch (item.getItemId()){
             case R.id.mensajeria:
+                mDrawerLayout.closeDrawers();
                 break;
             case R.id.perfil:
                 obtenerMisDatos();
@@ -234,10 +232,10 @@ public class UserActivity extends AppCompatActivity {
                     JSONObject jsonDatos = new JSONObject(object.getString("resultado"));
                     String nom = jsonDatos.getString("Nombres");
                     String ape = jsonDatos.getString("Apellidos");
-                    int tel = jsonDatos.getInt("Telefono");
+                    String tel = jsonDatos.getString("Telefono");
                     String cor = jsonDatos.getString("Correo");
                     String pas = jsonDatos.getString("Password");
-                    //mostrarPerfil(nom, ape, tel, cor, pas);
+                    mostrarPerfil(nom, ape, tel, cor, pas);
                 } catch (JSONException e) {
                     Toast.makeText(UserActivity.this, "¡Error al recibir los datos!", Toast.LENGTH_SHORT).show();
                 }
@@ -251,7 +249,7 @@ public class UserActivity extends AppCompatActivity {
         json.GET(UserActivity.this, SolicitudesJSON.URL_GET_PROFILE_DATA+
                 Preferences.obtenerString(UserActivity.this, Preferences.PREFERENCE_USUARIO_LOGIN));
     }
-    public void mostrarPerfil(String nombre, String apellidos, int telefono, String correo, String contraseña){
+    public void mostrarPerfil(String nombre, String apellidos, String telefono, String correo, String contraseña){
         TextView txtCerrar;
         TextView Apellidos;
         TextView Pass;
@@ -262,17 +260,17 @@ public class UserActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.mi_perfil);
         txtCerrar = (TextView) dialog.findViewById(R.id.miCerrarPerfil);
         id = (TextView) dialog.findViewById(R.id.myID);
-        Name = (TextView) dialog.findViewById(R.id.miNombre);
-        Apellidos = (TextView) dialog.findViewById(R.id.miApellidos);
-        Correo = (TextView) dialog.findViewById(R.id.miCorreo);
-        Cell = (TextView) dialog.findViewById(R.id.miTelefono);
-        Pass = (TextView) dialog.findViewById(R.id.miPassword);
         id.setText(Preferences.obtenerString(UserActivity.this, Preferences.PREFERENCE_USUARIO_LOGIN));
+        Name = (TextView) dialog.findViewById(R.id.miNombre);
         Name.setText(nombre);
+        Apellidos = (TextView) dialog.findViewById(R.id.miApellidos);
         Apellidos.setText(apellidos);
-        Cell.setText(telefono);
+        Correo = (TextView) dialog.findViewById(R.id.miCorreo);
         Correo.setText(correo);
+        Pass = (TextView) dialog.findViewById(R.id.miPassword);
         Pass.setText(contraseña);
+        Cell = (TextView) dialog.findViewById(R.id.miTelefono);
+        Cell.setText(telefono);
         txtCerrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

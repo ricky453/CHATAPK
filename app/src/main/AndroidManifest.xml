@@ -31,6 +31,16 @@
 
             </intent-filter>
         </activity>
+        <activity android:name=".Usuarios.MiPerfil.Perfil"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT"
+                    android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
+            </intent-filter>
+        </activity>
         <activity android:name=".Usuarios.UserActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

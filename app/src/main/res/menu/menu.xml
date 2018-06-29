@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
-        <item android:title="Mensajeria y Perfil">
+        <item android:title="Mensajes">
             <menu>
                 <item android:id="@+id/mensajeria" android:title="Mensajería" android:icon="@drawable/ic_chat"/>
                 <item android:id="@+id/perfil" android:title="Perfil" android:icon="@drawable/ic_user"/>
