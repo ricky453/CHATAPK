@@ -11,7 +11,6 @@
         </item>
         <item android:title="Extras">
             <menu>
-                <item android:id="@+id/invitar" android:title="Invitar" android:icon="@drawable/ic_record_voice_over"/>
                 <item android:id="@+id/salir" android:title="Cerrar sesión" android:icon="@drawable/ic_exit_to_app"/>
             </menu>
         </item>

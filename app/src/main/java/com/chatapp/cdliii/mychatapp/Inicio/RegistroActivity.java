@@ -110,7 +110,7 @@ public class RegistroActivity extends AppCompatActivity {
                     String estado = response.getString("resultado");
                     if(estado.equalsIgnoreCase("Se ha registrado correctamente.")){
                         String token = FirebaseInstanceId.getInstance().getToken();
-                        if(token!=null) subirToken(usuario, token);
+                        if(token!=null) subirToken(usuario);
                         else Toast.makeText(RegistroActivity.this, "El token es nulo.", Toast.LENGTH_SHORT).show();
                     }else {
                         Toast.makeText(RegistroActivity.this, estado, Toast.LENGTH_SHORT).show();
@@ -129,7 +129,7 @@ public class RegistroActivity extends AppCompatActivity {
         VolleyRP.addToQueue(solicitud, mRequest, this, volley);
     }
 
-    private void subirToken(String id, String token) {
+    private void subirToken(String id) {
         SolicitudesJSON json = new SolicitudesJSON() {
             @Override
             public void solicitudCompletada(JSONObject object) {
@@ -145,7 +145,7 @@ public class RegistroActivity extends AppCompatActivity {
         };
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("id", id);
-        hashMap.put("token", token);
+        hashMap.put("token", "0");
         json.POST(this, SolicitudesJSON.IP_TOKEN_UPLOAD, hashMap);
 
     }

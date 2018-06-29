@@ -24,6 +24,7 @@ public abstract class SolicitudesJSON {
     public static final String URL_DELETE_A_REQUEST = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Solicitudes_CANCELAR.php";
     public static final String URL_ACCEPT_A_REQUEST = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Solicitudes_ACEPTAR.php";
     public static final String URL_DELETE_A_FRIEND = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Solicitudes_ELIMINAR.php";
+    public static final String URL_GET_PROFILE_DATA = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Login_GETUSERDATA.php?id=";
     public static final String IP_TOKEN_UPLOAD = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Token_INSERTandUPDATE.php";
 
     public abstract void solicitudCompletada(JSONObject object);

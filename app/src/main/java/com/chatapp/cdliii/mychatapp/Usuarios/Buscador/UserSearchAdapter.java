@@ -1,12 +1,16 @@
 package com.chatapp.cdliii.mychatapp.Usuarios.Buscador;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chatapp.cdliii.mychatapp.R;
@@ -22,6 +26,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
     private List<UserAttributes> attributesList;
     private Context context;
     private UserFragment fragment;
+    private Dialog dialog;
 
     public UserSearchAdapter(List<UserAttributes> attributesList, Context context, UserFragment fragment) {
         this.attributesList = attributesList;
@@ -32,14 +37,40 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
     @Override
     public UserSearchHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_buscar_usuarios, parent, false);
-
+        dialog = new Dialog(parent.getContext());
         return new UserSearchHolder(view);
+    }
+
+    public void mostrarPerfil(View view, String nombre, String telefono, String correo){
+        TextView txtCerrar;
+        TextView amigoNombre;
+        TextView telefonoAmigo;
+        TextView correoAmigo;
+        dialog.setContentView(R.layout.perfil_amigo);
+        txtCerrar = (TextView) dialog.findViewById(R.id.txtCerrarPerfil);
+        amigoNombre = (TextView) dialog.findViewById(R.id.txtNombrePerfilAmigo);
+        telefonoAmigo = (TextView) dialog.findViewById(R.id.txtTelefonoPerfilAmigo);
+        correoAmigo = (TextView) dialog.findViewById(R.id.txtCorreoPerfilAmigo);
+        amigoNombre.setText(nombre);
+        telefonoAmigo.setText(telefono);
+        correoAmigo.setText(correo);
+        txtCerrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
     }
 
     @Override
     public void onBindViewHolder(UserSearchHolder holder, final int position) {
         holder.getFotoPerfil().setImageResource(attributesList.get(position).getFotoPerfil());
         holder.getNameUsuario().setText(attributesList.get(position).getNombre());
+        final String nombre = attributesList.get(position).getNombre().toString();
+        final String cor = attributesList.get(position).getCorreo().toString();
+        final String tel = attributesList.get(position).getTelefono().toString();
         switch (attributesList.get(position).getEstado()){
             case 1: //No son amigos ni solicitud
                 holder.getBotonCancelar().setVisibility(View.GONE);
@@ -91,6 +122,7 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchHolder> {
                 holder.getBotonAfirmar().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        mostrarPerfil(v, nombre, tel, cor);
                     }
                 });
                 holder.getCardView().setOnLongClickListener(new View.OnLongClickListener() {

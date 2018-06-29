@@ -37,8 +37,6 @@ public class FriendsFragment extends android.support.v4.app.Fragment {
 
     private EventBus bus = EventBus.getDefault();
 
-    //private static final String URL_GET_ALL_USERS = "https://cdliii-android.000webhostapp.com/ArchivosPHP/Usuarios_GETALL.php";
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_amigos, container, false);

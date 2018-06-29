@@ -11,6 +11,8 @@ public class Usuario {
     private int estado;
     private String mensaje;
     private String hora;
+    private String telefono;
+    private String correo;
     private int fotoPerfil;
 
     public Usuario(){
@@ -31,6 +33,22 @@ public class Usuario {
         this.estado = estado;
         this.hora = hora;
         this.fotoPerfil = fotoPerfil;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getId() {
