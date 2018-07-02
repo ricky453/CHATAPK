@@ -40,6 +40,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:navigationIcon="?attr/homeAsUpIndicator">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ricardo Barrientos"
+                    android:gravity="center"
+                    android:id="@+id/nombreAmigoChat"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:textColor="@color/white"/>
 
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>

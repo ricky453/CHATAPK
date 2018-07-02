@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chatapp.cdliii.mychatapp.Mensajes.MsgActivity;
+import com.chatapp.cdliii.mychatapp.Preferences;
 import com.chatapp.cdliii.mychatapp.R;
 
 import java.util.List;
@@ -67,6 +68,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.HolderFr
             public void onClick(View v) {
                 Intent i = new Intent(context, MsgActivity.class);
                 i.putExtra("key_receptor", atributosList.get(position).getId());
+                Preferences.savePreferenceString(v.getContext(), atributosList.get(position).getNombre(), Preferences.PREFERENCE_USUARIO_CHAT);
                 context.startActivity(i);
             }
         });

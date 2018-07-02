@@ -11,6 +11,7 @@ public class Preferences {
     public static final String STRING_PREFERENCES = "mychatapp.Mensajes.MsgActivity";
     public static final String PREFERENCE_ESTADO = "estado.button.sesion";
     public static final String PREFERENCE_USUARIO_LOGIN = "usuario.login";
+    public static String PREFERENCE_USUARIO_CHAT = "usuario.chat";
 
     public static boolean obtenerBoolean(Context c, String key){
         SharedPreferences preferences = c.getSharedPreferences(STRING_PREFERENCES, c.MODE_PRIVATE);

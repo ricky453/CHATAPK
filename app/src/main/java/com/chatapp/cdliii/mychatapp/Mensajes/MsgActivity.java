@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -50,6 +51,7 @@ public class MsgActivity extends AppCompatActivity {
     private RecyclerView rv;
     private Button btnEnviar;
     private EditText etEscribirMensaje;
+    private TextView nombreAmigo;
     private List<TextMsg> mensajeTexto;
     private MsgAdapter adapter;
     private int TEXT_LINES=1;
@@ -75,11 +77,13 @@ public class MsgActivity extends AppCompatActivity {
         mRequest = volley.getRequestQueue();
 
         EMISOR = Preferences.obtenerString(this, Preferences.PREFERENCE_USUARIO_LOGIN);
+        nombreAmigo = (TextView) findViewById(R.id.nombreAmigoChat);
         Intent i = getIntent();
         Bundle bundle = i.getExtras();
         if(bundle!=null){
             RECEPTOR = bundle.getString("key_receptor");
         }
+        nombreAmigo.setText(Preferences.obtenerString(this, Preferences.PREFERENCE_USUARIO_CHAT));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
         btnEnviar = (Button) findViewById(R.id.btnEnviar);
